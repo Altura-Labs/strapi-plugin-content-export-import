@@ -17,11 +17,21 @@ const ExportModel = ({model}) => {
     });
   };
 
-  const downloadJson = () => {
+  const downloadCsv = () => {
+    var json = content
+    var fields = Object.keys(json[0])
+    var replacer = function(key, value) { return value === null ? '' : value }
+    var csv = json.map(function(row){
+      return fields.map(function(fieldName){
+        return JSON.stringify(row[fieldName], replacer)
+      }).join(',')
+    })
+    csv.unshift(fields.join(',')) // add header column
+    csv = csv.join('\r\n');
     const current = new Date();
-    const file = new File([JSON.stringify(content)],
-      `${model.apiID}-${current.getTime()}.json`,
-      {type: "application/json;charset=utf-8"});
+    const file = new File([csv],
+      `${model.apiID}-${current.getTime()}.csv`,
+      {type: "text/csv;charset=utf-8"});
     saveAs(file);
   };
   return (<ModelItem>
@@ -33,7 +43,7 @@ const ExportModel = ({model}) => {
                 onClick={fetchModelData}
                 secondaryHotline>{fetching ? "Fetching" : "Fetch"}</Button>
         <Button disabled={!content}
-                onClick={downloadJson}
+                onClick={downloadCsv}
                 kind={content ? 'secondaryHotline' : 'secondary'}
         >Download</Button>
       </div>

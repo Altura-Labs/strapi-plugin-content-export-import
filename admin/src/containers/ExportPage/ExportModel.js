@@ -24,9 +24,9 @@ const ExportModel = ({model}) => {
     var csv = json.map(function(row){
       return fields.map(function(fieldName){
         return JSON.stringify(row[fieldName], replacer)
-      }).join(',')
+      }).join(';')
     })
-    csv.unshift(fields.join(',')) // add header column
+    csv.unshift(fields.join(';')) // add header column
     csv = csv.join('\r\n');
     const current = new Date();
     const file = new File([csv],

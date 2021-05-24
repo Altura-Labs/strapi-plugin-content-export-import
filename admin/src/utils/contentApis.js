@@ -15,5 +15,5 @@ export const getModels = () => {
 
 export const fetchEntries = (apiId, kind) => {
   const url = (kind === MODEL_KIND.collection) ? `/${pluralize(apiId)}` : `/${apiId}`;
-  return request(url, { method: 'GET' });
+  return request(url + '?_limit=-1', { method: 'GET' });
 };
